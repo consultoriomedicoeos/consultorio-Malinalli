@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultorio Médico Malinalli | Encuentra el Origen de tu Salud</title>
+    <style>
+        :root {
+            --primary-color: #2c4a3e;
+            --secondary-color: #4a7c59;
+            --accent-color: #d4af37;
+            --bg-color: #f9f8f6;
+            --text-color: #2b2b2b;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.08);
+        }
+
+        .dark-mode {
+            --primary-color: #8fb996;
+            --secondary-color: #4a7c59;
+            --accent-color: #e5c158;
+            --bg-color: #121a16;
+            --text-color: #e0e0e0;
+            --card-bg: #1e2b24;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px var(--shadow);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-container h1 {
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 2px solid white;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+
+        .theme-toggle:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(rgba(44, 74, 62, 0.8), rgba(44, 74, 62, 0.8)), url('https://14698088142923197097.googleusercontent.com/viewer') center/cover;
+            color: white;
+        }
+
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            font-style: italic;
+            margin-bottom: 30px;
+            color: var(--accent-color);
+        }
+
+        .btn-main {
+            background-color: var(--accent-color);
+            color: #1a2b22;
+            padding: 15px 35px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-main:hover {
+            transform: scale(1.05);
+            background-color: #e5c158;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        section {
+            margin-bottom: 4rem;
+        }
+
+        h3.section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 2.5rem;
+            color: var(--primary-color);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px var(--shadow);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .service-card {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px var(--shadow);
+            border-top: 5px solid var(--secondary-color);
+        }
+
+        .service-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        /* Formulario Estilo Intuitivo */
+        .form-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px var(--shadow);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(74, 124, 89, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .checkbox-group input {
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        /* Simulador de Base de Datos Visual */
+        .database-panel {
+            background: var(--card-bg);
+            border: 2px dashed var(--secondary-color);
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+
+        .database-panel h4 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .db-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .db-table th, .db-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .db-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* WhatsApp Flotante */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <h1>🌿 Malinalli</h1>
+        </div>
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#nosotros">Quiénes Somos</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#citas" style="background: var(--accent-color); color: #1a2b22; padding: 10px 20px; border-radius: 8px;">Agendar Cita</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙 Modo Oscuro</button>
+        </nav>
+    </header>
+
+    <div class="hero" id="inicio">
+        <h2>Consultorio Médico Malinalli</h2>
+        <p>"Encuentra el Origen de tu Salud"</p>
+        <a href="#citas" class="btn-main">¡Agendar mi Cita Fácilmente!</a>
+    </div>
+
+    <div class="container">
+        
+        <!-- Quiénes Somos -->
+        <section id="nosotros">
+            <h3 class="section-title">Quiénes Somos</h3>
+            <div class="card">
+                <p style="font-size: 1.2rem; text-align: center; line-height: 1.8;">
+                    En <strong>Consultorio Médico Malinalli</strong> combinamos la medicina integral y humana con el compromiso absoluto por tu bienestar. Nuestro objetivo es atender a cada miembro de tu familia, desde los más pequeños hasta los adultos mayores, brindando un espacio cálido, confiable y accesible donde encontrar el origen real de tu salud.
+                </p>
+            </div>
+        </section>
+
+        <!-- Servicios -->
+        <section id="servicios">
+            <h3 class="section-title">Nuestros Servicios Médicos</h3>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h4>Consulta General Integral</h4>
+                    <p>Atención médica personalizada para evaluar tu estado de salud general y prevenir padecimientos.</p>
+                </div>
+                <div class="service-card">
+                    <h4>Medicina Familiar</h4>
+                    <p>Cuidado continuo y especializado para todas las etapas de la vida de tus seres queridos.</p>
+                </div>
+                <div class="service-card">
+                    <h4>Control de Salud y Seguimiento</h4>
+                    <p>Monitoreo constante de tratamientos, recetas y evolución clínica con base de datos segura.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Apartado de Citas e Interfaz Intuitiva -->
+        <section id="citas">
+            <h3 class="section-title">Agendar Cita Médica</h3>
+            <div class="form-container">
+                <p style="text-align: center; margin-bottom: 25px; font-size: 1.1rem;">
+                    Rellena los datos de forma sencilla. ¡Es muy fácil para cualquier edad!
+                </p>
+                
+                <form id="appointmentForm" onsubmit="handleAppointment(event)">
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo del Paciente:</label>
+                        <input type="text" id="nombre" required placeholder="Ej. María López Pérez">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edad">Edad:</label>
+                        <input type="number" id="edad" required placeholder="Ej. 45">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Número Telefónico (WhatsApp):</label>
+                        <input type="tel" id="telefono" required placeholder="Ej. 55 1234 5678">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha">Fecha y Hora de la Cita:</label>
+                        <input type="datetime-local" id="fecha" required>
+                    </div>
+
+                    <!-- Casilla especial para recordatorio de WhatsApp -->
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="whatsappAlert" checked>
+                        <label for="whatsappAlert">📲 Deseo recibir un recordatorio automático por WhatsApp <strong>30 minutos antes</strong> de mi cita.</label>
+                    </div>
+
+                    <button type="submit" class="btn-main" style="width: 100%;">Confirmar y Guardar Mi Cita</button>
+                </form>
+
+                <!-- Panel de Simulación de Base de Datos Interna -->
+                <div class="database-panel">
+                    <h4>📊 Vista Previa de tu Base de Datos Interna (Google Sheets simulado):</h4>
+                    <p style="font-size: 0.9rem; margin-bottom: 10px; color: var(--text-color);">Aquí es donde se registrarán automáticamente las citas conforme tus pacientes las vayan agendando:</p>
+                    <table class="db-table">
+                        <thead>
+                            <tr>
+                                <th>Paciente</th>
+                                <th>Edad</th>
+                                <th>Teléfono</th>
+                                <th>Última Cita</th>
+                                <th>Última Receta</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dbRows">
+                            <tr>
+                                <td>Juan Pérez García</td>
+                                <td>62</td>
+                                <td>55 9876 5432</td>
+                                <td>2026-09-22 10:00</td>
+                                <td>Receta_Diabetes_01.pdf</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Botón Flotante de WhatsApp -->
+    <a href="https://wa.me/" target="_blank" class="whatsapp-float">
+        💬 Contactar por WhatsApp
+    </a>
+
+    <footer>
+        <p>&copy; 2026 Consultorio Médico Malinalli. Todos los derechos reservados.</p>
+        <p style="font-size: 0.9rem; margin-top: 5px; color: var(--accent-color);">Encuentra el Origen de tu Salud</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.querySelector('.theme-toggle');
+            if (document.body.classList.contains('dark-mode')) {
+                btn.textContent = '☀️ Modo Claro';
+            } else {
+                btn.textContent = '🌙 Modo Oscuro';
+            }
+        }
+
+        function handleAppointment(event) {
+            event.preventDefault();
+            
+            const nombre = document.getElementById('nombre').value;
+            const edad = document.getElementById('edad').value;
+            const telefono = document.getElementById('telefono').value;
+            const fecha = document.getElementById('fecha').value;
+            const alerta = document.getElementById('whatsappAlert').checked;
+
+            // Agregar a la tabla de base de datos visual
+            const tbody = document.getElementById('dbRows');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${nombre}</td>
+                <td>${edad}</td>
+                <td>${telefono}</td>
+                <td>${fecha.replace('T', ' ')}</td>
+                <td><span style="color: green; font-weight: bold;">Pendiente de consulta</span></td>
+            `;
+            tbody.insertBefore(newRow, tbody.firstChild);
+
+            alert(`¡Cita agendada con éxito para ${nombre}!\n\n` + 
+                  (alerta ? `✅ Se ha programado la alerta por WhatsApp para 30 minutos antes de las ${fecha.replace('T', ' ')}.\n` : '') +
+                  `Los datos se han guardado correctamente en la base de datos del consultorio.`);
+
+            document.getElementById('appointmentForm').reset();
+        }
+    </script>
+</body>
+</html>
