@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultorio Médico Malinalli | Encuentra el Origen de tu Salud</title>
+    <style>
+        :root {
+            --primary-color: #2c4a3e;
+            --secondary-color: #4a7c59;
+            --accent-color: #d4af37;
+            --bg-color: #f9f8f6;
+            --text-color: #2b2b2b;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.08);
+        }
+
+        .dark-mode {
+            --primary-color: #8fb996;
+            --secondary-color: #4a7c59;
+            --accent-color: #e5c158;
+            --bg-color: #121a16;
+            --text-color: #e0e0e0;
+            --card-bg: #1e2b24;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px var(--shadow);
+        }
+
+        .logo-container h1 {
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 2px solid white;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+
+        .theme-toggle:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 9rem 2rem;
+            background: linear-gradient(rgba(44, 74, 62, 0.45), rgba(44, 74, 62, 0.45)), url('tarjeta-malinalli.jpg') center/cover no-repeat;
+            color: #ffffff;
+        }
+
+        .hero h2 {
+            font-size: 3.2rem;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
+        }
+
+        .hero p {
+            font-size: 1.6rem;
+            font-style: italic;
+            margin-bottom: 40px;
+            color: #ffffff;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.9);
+        }
+
+        .btn-main {
+            background-color: var(--accent-color);
+            color: #1a2b22;
+            padding: 15px 35px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-main:hover {
+            transform: scale(1.02);
+            background-color: #e5c158;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        section {
+            margin-bottom: 4rem;
+        }
+
+        h3.section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 2.5rem;
+            color: var(--primary-color);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px var(--shadow);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .service-card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px var(--shadow);
+            border-top: 5px solid var(--secondary-color);
+        }
+
+        .service-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: var(--primary-color);
+        }
+
+        .service-card p {
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .slider-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px var(--shadow);
+            background-color: var(--card-bg);
+            border: 3px solid var(--accent-color);
+        }
+
+        .slides {
+            display: flex;
+            width: 300%; 
+            animation: slideAnimation 14s infinite;
+        }
+
+        .slide {
+            width: 100%;
+            flex-shrink: 0;
+            position: relative;
+            height: 400px;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            background: rgba(44, 74, 62, 0.85);
+            color: white;
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+        }
+
+        @keyframes slideAnimation {
+            0% { transform: translateX(0%); }
+            30% { transform: translateX(0%); }
+            35% { transform: translateX(-100%); }
+            65% { transform: translateX(-100%); }
+            70% { transform: translateX(-200%); }
+            100% { transform: translateX(-200%); }
+        }
+
+        .form-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px var(--shadow);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1rem;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <h1>Malinalli</h1>
+        </div>
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#nosotros">Quiénes Somos</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#galeria">Galería</a>
+            <a href="#citas" style="background: var(--accent-color); color: #1a2b22; padding: 8px 18px; border-radius: 8px;">Agendar Cita</a>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </nav>
+    </header>
+
+    <div class="hero" id="inicio">
+        <h2>Consultorio Médico Malinalli</h2>
+        <p>"Encuentra el Origen de tu Salud"</p>
+        <a href="#citas" class="btn-main" style="width: auto;">Agendar Cita</a>
+    </div>
+
+    <div class="container">
+        <section id="nosotros">
+            <h3 class="section-title">Quiénes Somos</h3>
+            <div class="card">
+                <p style="font-size: 1.2rem; text-align: center; line-height: 1.8;">
+                    En <strong>Consultorio Médico Malinalli</strong> combinamos la medicina integral y humana con el compromiso absoluto por tu bienestar. Nuestro objetivo es atender a cada miembro de tu familia, brindando un espacio cálido, confiable y accesible donde encontrar el origen real de tu salud.
+                </p>
+            </div>
+        </section>
+
+        <section id="servicios">
+            <h3 class="section-title">Nuestros Servicios Médicos</h3>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h4>Medicina Integral</h4>
+                    <p>Valoración médica completa que analiza todos los factores del estilo de vida y antecedentes clínicos.</p>
+                </div>
+                <div class="service-card">
+                    <h4>Fitoterapia</h4>
+                    <p>Aplicación científica y medicinal de extractos vegetales para el tratamiento y prevención de padecimientos.</p>
+                </div>
+                <div class="service-card">
+                    <h4>Nutrición y Fórmulas</h4>
+                    <p>Planes nutricionales adaptados y prescripción de fórmulas magistrales para potenciar tu energía vital.</p>
+                </div>
+                <div class="service-card">
+                    <h4>Consultas Generales</h4>
+                    <p>Atención médica de primer contacto para diagnósticos oportunos, certificados y seguimiento continuo.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="citas">
+            <h3 class="section-title">Agendar Cita Médica</h3>
+            <div class="form-container">
+                <p style="text-align: center; margin-bottom: 25px; font-size: 1.1rem;">
+                    Selecciona tu fecha y hora (Horario disponible de 8:00 AM a 10:00 PM).
+                </p>
+                
+                <form id="appointmentForm" action="https://script.google.com/macros/s/AKfycbzuqzFcHUkHpTZtHUXkMi2csqdioRcc8ZPqRhvCsFcPvBMlrT-lacjDEhPHYBGL5p0cSA/exec" method="POST" target="hidden_iframe" onsubmit="prepararEnvioCita(event)">
+                    
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo del Paciente:</label>
+                        <input type="text" id="nombre" name="nombre" required placeholder="Ej. María López Pérez">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edad">Edad:</label>
+                        <input type="number" id="edad" name="edad" required placeholder="Ej. 45">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Número Telefónico (WhatsApp):</label>
+                        <input type="tel" id="telefono" name="telefono" required placeholder="Ej. 55 1234 5678">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="correo">Correo Electrónico:</label>
+                        <input type="email" id="correo" name="correo" required placeholder="Ej. correo@ejemplo.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="motivo">Motivo de la Cita:</label>
+                        <textarea id="motivo" name="motivo" rows="3" required placeholder="Ej. Dolor de cabeza frecuente..."></textarea>
+                    </div>
+
+                    <!-- Fecha con restricción para bloquear días pasados -->
+                    <div class="form-group">
+                        <label for="fecha">Fecha de la Cita:</label>
+                        <input type="date" id="fecha" name="fecha" required onchange="actualizarHorasDisponibles()">
+                    </div>
+
+                    <!-- Hora de 8:00 AM a 10:00 PM en punto -->
+                    <div class="form-group">
+                        <label for="hora">Hora de la Consulta (De 8:00 AM a 10:00 PM):</label>
+                        <select id="hora" name="hora" required disabled>
+                            <option value="">-- Primero selecciona una fecha --</option>
+                        </select>
+                    </div>
+
+                    <input type="hidden" id="fechaHoraCompleta" name="fechaCompleta">
+                    <input type="hidden" name="ultimaCita" value="Primera vez">
+
+                    <button type="submit" class="btn-main">Confirmar y Enviar Cita</button>
+                </form>
+
+                <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="alertaExitoCita()"></iframe>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Consultorio Médico Malinalli. Todos los derechos reservados.</p>
+        <p style="font-size: 0.9rem; margin-top: 5px; color: var(--accent-color);">Encuentra el Origen de tu Salud</p>
+    </footer>
+
+    <script>
+        let formularioEnviado = false;
+        const urlGoogleScript = "https://script.google.com/macros/s/AKfycbzuqzFcHUkHpTZtHUXkMi2csqdioRcc8ZPqRhvCsFcPvBMlrT-lacjDEhPHYBGL5p0cSA/exec";
+
+        // Al cargar la página, bloqueamos los días anteriores al actual en el calendario
+        window.onload = function() {
+            const hoy = new Date().toISOString().split('T')[0];
+            document.getElementById('fecha').setAttribute('min', hoy);
+        };
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // Función inteligente que consulta tu Google Sheet para bloquear horas ocupadas
+        async function actualizarHorasDisponibles() {
+            const fechaSeleccionada = document.getElementById('fecha').value;
+            const selectHora = document.getElementById('hora');
+            
+            selectHora.innerHTML = '<option value="">Cargando horarios disponibles...</option>';
+            selectHora.disabled = true;
+
+            try {
+                // Consultamos las citas existentes en tu base de datos
+                const respuesta = await fetch(urlGoogleScript);
+                const citasRegistradas = await respuesta.json(); // Array con textos de citas ocupadas
+
+                // Horario de 8:00 (8) a 22:00 (22)
+                const todasLasHoras = [
+                    {val: "08:00 hrs", label: "08:00 AM"},
+                    {val: "09:00 hrs", label: "09:00 AM"},
+                    {val: "10:00 hrs", label: "10:00 AM"},
+                    {val: "11:00 hrs", label: "11:00 AM"},
+                    {val: "12:00 hrs", label: "12:00 PM"},
+                    {val: "13:00 hrs", label: "01:00 PM"},
+                    {val: "14:00 hrs", label: "02:00 PM"},
+                    {val: "15:00 hrs", label: "03:00 PM"},
+                    {val: "16:00 hrs", label: "04:00 PM"},
+                    {val: "17:00 hrs", label: "05:00 PM"},
+                    {val: "18:00 hrs", label: "06:00 PM"},
+                    {val: "19:00 hrs", label: "07:00 PM"},
+                    {val: "20:00 hrs", label: "08:00 PM"},
+                    {val: "21:00 hrs", label: "09:00 PM"},
+                    {val: "22:00 hrs", label: "10:00 PM"}
+                ];
+
+                selectHora.innerHTML = '<option value="">-- Selecciona una hora disponible --</option>';
+                
+                todasLasHoras.forEach(h => {
+                    // Formato exacto que se guarda en la hoja: "YYYY-MM-DD a las [hora]"
+                    const combinacionBuscada = `${fechaSeleccionada} a las ${h.val}`;
+                    const estaOcupada = citasRegistradas.includes(combinacionBuscada);
+
+                    const option = document.createElement('option');
+                    option.value = h.val;
+                    
+                    if (estaOcupada) {
+                        option.textContent = `${h.label} (OCUPADA)`;
+                        option.disabled = true;
+                        option.style.color = "#ff4d4d";
+                    } else {
+                        option.textContent = h.label;
+                    }
+                    selectHora.appendChild(option);
+                });
+
+                selectHora.disabled = false;
+
+            } catch (error) {
+                console.error("Error al consultar la base de datos:", error);
+                selectHora.innerHTML = '<option value="">Error al cargar horas. Intenta de nuevo.</option>';
+            }
+        }
+
+        function prepararEnvioCita(event) {
+            formularioEnviado = true;
+            
+            const nombre = document.getElementById('nombre').value;
+            const edad = document.getElementById('edad').value;
+            const telefono = document.getElementById('telefono').value;
+            const correo = document.getElementById('correo').value;
+            const motivo = document.getElementById('motivo').value;
+            const fechaVal = document.getElementById('fecha').value;
+            const horaVal = document.getElementById('hora').value;
+
+            // Consolidamos la fecha y hora exacta para la base de datos (Columna G)
+            const fechaHoraTexto = `${fechaVal} a las ${horaVal}`;
+            document.getElementById('fechaHoraCompleta').value = fechaHoraTexto;
+
+            // Abrimos WhatsApp con los datos listos
+            if(fechaVal && horaVal) {
+                const tuNumeroWhatsApp = "5213521472048"; // Reemplaza cuando tengas tu número oficial
+                const mensaje = `Hola, nueva cita registrada:%0A%0A*Nombre:* ${nombre}%0A*Edad:* ${edad} años%0A*Teléfono:* ${telefono}%0A*Correo:* ${correo}%0A*Motivo:* ${motivo}%0A*Fecha y Hora:* ${fechaVal} a las ${horaVal}`;
+                
+                window.open(`https://wa.me/${tuNumeroWhatsApp}?text=${mensaje}`, '_blank');
+            }
+        }
+
+        function alertaExitoCita() {
+            if(formularioEnviado) {
+                alert('¡Cita registrada con éxito en el sistema y guardada en tu base de datos!');
+                document.getElementById('appointmentForm').reset();
+                document.getElementById('hora').disabled = true;
+                document.getElementById('hora').innerHTML = '<option value="">-- Primero selecciona una fecha --</option>';
+                formularioEnviado = false;
+            }
+        }
+    </script>
+</body>
+</html>
