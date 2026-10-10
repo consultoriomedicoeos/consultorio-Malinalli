@@ -646,75 +646,95 @@
             selectHora.disabled = false;
         }
 
-        function enviarFormularioCita(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnSubmit');
-            btn.disabled = true;
-            btn.textContent = "Procesando cita...";
+ function enviarFormularioCita(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnSubmit');
+    btn.disabled = true;
+    btn.textContent = "Procesando cita...";
 
-            const form = document.getElementById('appointmentForm');
-            const formData = new FormData(form);
+    // 1. Obtener o generar el ID de usuario
+    let idUsuario = document.getElementById('idUsuarioExistente').value;
+    if (!idUsuario) {
+        const ap = (document.getElementById('apellido').value || "XX").substring(0,2).toUpperCase();
+        const nom = (document.getElementById('nombre').value || "XX").substring(0,2).toUpperCase();
+        const fechaNac = document.getElementById('fechaNacimiento').value;
+        const anioNac = fechaNac ? fechaNac.substring(2,4) : "00";
+        const numAleatorio = Math.floor(100 + Math.random() * 900);
+        idUsuario = `${ap}${nom}-${anioNac}-${numAleatorio}`;
+    }
 
-            // Generamos o recuperamos el ID de usuario
-            let idUsuario = document.getElementById('idUsuarioExistente').value;
-            if (!idUsuario) {
-                const ap = (document.getElementById('apellido').value || "XX").substring(0,2).toUpperCase();
-                const nom = (document.getElementById('nombre').value || "XX").substring(0,2).toUpperCase();
-                const fechaNac = document.getElementById('fechaNacimiento').value;
-                const anioNac = fechaNac ? fechaNac.substring(2,4) : "00";
-                const numAleatorio = Math.floor(100 + Math.random() * 900);
-                idUsuario = `${ap}${nom}-${anioNac}-${numAleatorio}`;
-            }
+    const nombre = document.getElementById('nombre').value;
+    const apellido = document.getElementById('apellido').value;
+    const nombreCompleto = `${nombre} ${apellido}`;
+    const edad = document.getElementById('edad').value;
+    const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+    const residencia = document.getElementById('residencia').value;
+    const telefono = document.getElementById('telefono').value;
+    const correo = document.getElementById('correo').value;
+    const motivo = document.getElementById('motivo').value;
+    const fecha = document.getElementById('fecha').value;
+    const hora = document.getElementById('hora').value;
 
-            const nombreCompleto = document.getElementById('nombre').value + " " + document.getElementById('apellido').value;
-            const edad = document.getElementById('edad').value;
-            const residencia = document.getElementById('residencia').value;
-            const telefono = document.getElementById('telefono').value;
-            const correo = document.getElementById('correo').value;
-            const motivo = document.getElementById('motivo').value;
-            const fecha = document.getElementById('fecha').value;
-            const hora = document.getElementById('hora').value;
+    // 2. Llenar y mostrar de inmediato la Tarjeta Digital
+    document.getElementById('cardNombre').textContent = nombreCompleto;
+    document.getElementById('cardID').textContent = idUsuario;
+    document.getElementById('cardFecha').textContent = fecha;
+    document.getElementById('cardHora').textContent = hora;
+    document.getElementById('tarjetaCita').style.display = 'block';
 
-            // 1. Mostrar de inmediato la Tarjeta Digital en pantalla
-            document.getElementById('cardNombre').textContent = nombreCompleto;
-            document.getElementById('cardID').textContent = idUsuario;
-            document.getElementById('cardFecha').textContent = fecha;
-            document.getElementById('cardHora').textContent = hora;
-            document.getElementById('tarjetaCita').style.display = 'block';
+    // 3. Abrir mensaje de WhatsApp
+    const tuNumeroWhatsApp = "5213521472048";
+    const mensajeWA = `🚨 *NUEVA CITA REGISTRADA - CONSULTORIO MALINALLI*%0A%0A` +
+                      `🆔 *ID Usuario:* ${idUsuario}%0A` +
+                      `👤 *Paciente:* ${nombreCompleto}%0A` +
+                      `🎂 *Edad:* ${edad} años%0A` +
+                      `📍 *Origen:* ${residencia}%0A` +
+                      `📞 *Teléfono:* ${telefono}%0A` +
+                      `✉️ *Correo:* ${correo}%0A` +
+                      `🩺 *Motivo:* ${motivo}%0A` +
+                      `📅 *Fecha:* ${fecha}%0A` +
+                      `⏰ *Hora:* ${hora}`;
 
-            // 2. Abrir WhatsApp con los datos completos para notificación del consultorio
-            const tuNumeroWhatsApp = "5213521472048";
-            const mensajeWA = `🚨 *NUEVA CITA REGISTRADA - CONSULTORIO MALINALLI*%0A%0A` +
-                              `🆔 *ID Usuario:* ${idUsuario}%0A` +
-                              `👤 *Paciente:* ${nombreCompleto}%0A` +
-                              `🎂 *Edad:* ${edad} años%0A` +
-                              `📍 *Origen:* ${residencia}%0A` +
-                              `📞 *Teléfono:* ${telefono}%0A` +
-                              `✉️ *Correo:* ${correo}%0A` +
-                              `🩺 *Motivo:* ${motivo}%0A` +
-                              `📅 *Fecha:* ${fecha}%0A` +
-                              `⏰ *Hora:* ${hora}`;
+    window.open(`https://wa.me/${tuNumeroWhatsApp}?text=${mensajeWA}`, '_blank');
 
-            window.open(`https://wa.me/${tuNumeroWhatsApp}?text=${mensajeWA}`, '_blank');
+    // 4. Preparar datos formateados como URLSearchParams para Google Apps Script
+    const datosEnvio = new URLSearchParams();
+    datosEnvio.append('idUsuarioGenerado', idUsuario);
+    datosEnvio.append('idUsuarioExistente', document.getElementById('idUsuarioExistente').value);
+    datosEnvio.append('nombre', nombre);
+    datosEnvio.append('apellido', apellido);
+    datosEnvio.append('edad', edad);
+    datosEnvio.append('fechaNacimiento', fechaNacimiento);
+    datosEnvio.append('residencia', residencia);
+    datosEnvio.append('telefono', telefono);
+    datosEnvio.append('correo', correo);
+    datosEnvio.append('motivo', motivo);
+    datosEnvio.append('fecha', fecha);
+    datosEnvio.append('hora', hora);
 
-            // 3. Enviar al Google Sheet de manera asíncrona
-            fetch(urlGoogleScript, {
-                method: 'POST',
-                body: new URLSearchParams(formData)
-            })
-            .then(() => {
-                alert(`¡Cita registrada con éxito! Tu ID de Usuario es: ${idUsuario}. Se ha generado tu tarjeta.`);
-                document.getElementById('tarjetaCita').scrollIntoView({ behavior: 'smooth' });
-            })
-            .catch(err => {
-                alert("Cita procesada. Revisa tu tarjeta digital generada.");
-                document.getElementById('tarjetaCita').scrollIntoView({ behavior: 'smooth' });
-            })
-            .finally(() => {
-                btn.disabled = false;
-                btn.textContent = "Confirmar y Registrar Cita";
-            });
-        }
+    // 5. Enviar a Google Apps Script con mode: 'no-cors'
+    fetch(urlGoogleScript, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: datosEnvio
+    })
+    .then(() => {
+        alert(`¡Cita registrada con éxito! Tu ID de Usuario es: ${idUsuario}. Se ha guardado en la base de datos.`);
+        document.getElementById('tarjetaCita').scrollIntoView({ behavior: 'smooth' });
+    })
+    .catch(err => {
+        console.error("Error enviando datos:", err);
+        alert("Cita procesada. Revisa tu tarjeta digital generada.");
+        document.getElementById('tarjetaCita').scrollIntoView({ behavior: 'smooth' });
+    })
+    .finally(() => {
+        btn.disabled = false;
+        btn.textContent = "Confirmar y Registrar Cita";
+    });
+}
     </script>
 </body>
 </html>
