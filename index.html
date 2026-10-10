@@ -295,7 +295,6 @@
             color: var(--text-color);
         }
 
-        /* Estilos de la Tarjeta Digital de Cita */
         #tarjetaCita {
             display: none;
             background: #ffffff;
@@ -449,8 +448,10 @@
                     <small id="mensajeUsuario" style="display: block; margin-top: 5px; font-weight: bold;"></small>
                 </div>
 
-                <form id="appointmentForm" onsubmit="enviarFormularioCita(event)">
+                <form id="appointmentForm" action="https://script.google.com/macros/s/AKfycbzRxXlGW2cqFEEKCzLvkUlx1h0YgM_BvT_ckIVXaNg01HVvt_1jv8I9q4SWGWcB0IuPsw/exec" method="POST" target="hidden_iframe" onsubmit="prepararEnvioCita(event)">
+                    
                     <input type="hidden" id="idUsuarioExistente" name="idUsuarioExistente">
+                    <input type="hidden" id="idUsuarioGenerado" name="idUsuarioGenerado">
 
                     <div class="form-group">
                         <label for="nombre">Nombre(s):</label>
@@ -516,6 +517,8 @@
                     <button type="submit" id="btnSubmit" class="btn-main">Confirmar y Registrar Cita</button>
                 </form>
 
+                <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="alertaExitoCita()"></iframe>
+
                 <!-- Tarjeta Digital Imprimible -->
                 <div id="tarjetaCita">
                     <div class="card-header-digital">
@@ -552,6 +555,7 @@
 
     <script>
         const urlGoogleScript = "https://script.google.com/macros/s/AKfycbzRxXlGW2cqFEEKCzLvkUlx1h0YgM_BvT_ckIVXaNg01HVvt_1jv8I9q4SWGWcB0IuPsw/exec";
+        let formularioEnviado = false;
 
         let indiceCarrusel = 0;
         function moverCarrusel(dir) {
@@ -646,13 +650,10 @@
             selectHora.disabled = false;
         }
 
-        function enviarFormularioCita(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnSubmit');
-            btn.disabled = true;
-            btn.textContent = "Procesando cita...";
+        function prepararEnvioCita(event) {
+            formularioEnviado = true;
 
-            // 1. Obtener o generar el ID de usuario
+            // Obtener o generar el ID de usuario
             let idUsuario = document.getElementById('idUsuarioExistente').value;
             if (!idUsuario) {
                 const ap = (document.getElementById('apellido').value || "XX").substring(0,2).toUpperCase();
@@ -662,12 +663,10 @@
                 const numAleatorio = Math.floor(100 + Math.random() * 900);
                 idUsuario = `${ap}${nom}-${anioNac}-${numAleatorio}`;
             }
+            document.getElementById('idUsuarioGenerado').value = idUsuario;
 
-            const nombre = document.getElementById('nombre').value;
-            const apellido = document.getElementById('apellido').value;
-            const nombreCompleto = `${nombre} ${apellido}`;
+            const nombreCompleto = document.getElementById('nombre').value + " " + document.getElementById('apellido').value;
             const edad = document.getElementById('edad').value;
-            const fechaNacimiento = document.getElementById('fechaNacimiento').value;
             const residencia = document.getElementById('residencia').value;
             const telefono = document.getElementById('telefono').value;
             const correo = document.getElementById('correo').value;
@@ -675,14 +674,14 @@
             const fecha = document.getElementById('fecha').value;
             const hora = document.getElementById('hora').value;
 
-            // 2. Llenar y mostrar de inmediato la Tarjeta Digital
+            // 1. Mostrar tarjeta digital
             document.getElementById('cardNombre').textContent = nombreCompleto;
             document.getElementById('cardID').textContent = idUsuario;
             document.getElementById('cardFecha').textContent = fecha;
             document.getElementById('cardHora').textContent = hora;
             document.getElementById('tarjetaCita').style.display = 'block';
 
-            // 3. Abrir mensaje de WhatsApp
+            // 2. Abrir WhatsApp con el reporte
             const tuNumeroWhatsApp = "5213521472048";
             const mensajeWA = `🚨 *NUEVA CITA REGISTRADA - CONSULTORIO MALINALLI*%0A%0A` +
                               `🆔 *ID Usuario:* ${idUsuario}%0A` +
@@ -696,44 +695,17 @@
                               `⏰ *Hora:* ${hora}`;
 
             window.open(`https://wa.me/${tuNumeroWhatsApp}?text=${mensajeWA}`, '_blank');
+        }
 
-            // 4. Preparar datos formateados como URLSearchParams para Google Apps Script
-            const datosEnvio = new URLSearchParams();
-            datosEnvio.append('idUsuarioGenerado', idUsuario);
-            datosEnvio.append('idUsuarioExistente', document.getElementById('idUsuarioExistente').value);
-            datosEnvio.append('nombre', nombre);
-            datosEnvio.append('apellido', apellido);
-            datosEnvio.append('edad', edad);
-            datosEnvio.append('fechaNacimiento', fechaNacimiento);
-            datosEnvio.append('residencia', residencia);
-            datosEnvio.append('telefono', telefono);
-            datosEnvio.append('correo', correo);
-            datosEnvio.append('motivo', motivo);
-            datosEnvio.append('fecha', fecha);
-            datosEnvio.append('hora', hora);
-
-            // 5. Enviar a Google Apps Script con mode: 'no-cors'
-            fetch(urlGoogleScript, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: datosEnvio
-            })
-            .then(() => {
-                alert(`¡Cita registrada con éxito! Tu ID de Usuario es: ${idUsuario}. Se ha guardado en la base de datos.`);
+        function alertaExitoCita() {
+            if(formularioEnviado) {
+                alert('¡Cita registrada con éxito en el sistema!');
+                document.getElementById('appointmentForm').reset();
+                document.getElementById('hora').disabled = true;
+                document.getElementById('hora').innerHTML = '<option value="">-- Primero selecciona una fecha --</option>';
                 document.getElementById('tarjetaCita').scrollIntoView({ behavior: 'smooth' });
-            })
-            .catch(err => {
-                console.error("Error enviando datos:", err);
-                alert("Cita procesada. Revisa tu tarjeta digital generada.");
-                document.getElementById('tarjetaCita').scrollIntoView({ behavior: 'smooth' });
-            })
-            .finally(() => {
-                btn.disabled = false;
-                btn.textContent = "Confirmar y Registrar Cita";
-            });
+                formularioEnviado = false;
+            }
         }
     </script>
 </body>
