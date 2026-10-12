@@ -448,7 +448,7 @@
                     <small id="mensajeUsuario" style="display: block; margin-top: 5px; font-weight: bold;"></small>
                 </div>
 
-                <!-- Formulario conectado mediante iframe oculto (Conexión blindada a Excel) -->
+                <!-- Formulario clásico conectado al iframe oculto -->
                 <form id="appointmentForm" action="https://script.google.com/macros/s/AKfycbzRxXlGW2cqFEEKCzLvkUlx1h0YgM_BvT_ckIVXaNg01HVvt_1jv8I9q4SWGWcB0IuPsw/exec" method="POST" target="hidden_iframe" onsubmit="prepararEnvioCita(event)">
                     
                     <input type="hidden" id="idUsuarioExistente" name="idUsuarioExistente">
@@ -574,7 +574,6 @@
             document.body.classList.toggle('dark-mode');
         }
 
-        // --- FUNCIÓN DE BÚSQUEDA Y AUTOCOMPLETADO PARA PACIENTES RECURRENTES ---
         async function buscarUsuarioExistente() {
             const id = document.getElementById('idUsuarioBuscar').value.trim().toUpperCase();
             const msg = document.getElementById('mensajeUsuario');
@@ -592,7 +591,6 @@
                 const data = await res.json();
 
                 if(data.encontrado) {
-                    // Autocompletar datos personales registrados en el Excel
                     document.getElementById('idUsuarioExistente').value = id;
                     document.getElementById('nombre').value = data.nombre;
                     document.getElementById('apellido').value = data.apellido;
@@ -604,17 +602,17 @@
                     document.getElementById('telefono').value = data.telefono;
                     document.getElementById('correo').value = data.correo;
 
-                    // Dejar libres y limpios únicamente los campos de la nueva cita
+                    // Dejar vacíos únicamente los campos de la nueva cita
                     document.getElementById('motivo').value = "";
                     document.getElementById('fecha').value = "";
                     document.getElementById('hora').disabled = true;
                     document.getElementById('hora').innerHTML = '<option value="">-- Primero selecciona una fecha --</option>';
 
                     msg.style.color = "green";
-                    msg.textContent = `¡Bienvenido de nuevo, ${data.nombre}! Datos personales autocompletados. Selecciona motivo, fecha y hora de tu nueva cita.`;
+                    msg.textContent = `¡Bienvenido de nuevo, ${data.nombre}! Datos personales cargados. Selecciona motivo, fecha y hora.`;
                 } else {
                     msg.style.color = "red";
-                    msg.textContent = "No se encontró ningún usuario con ese ID. Verifique o llene sus datos.";
+                    msg.textContent = "No se encontró ningún usuario con ese ID.";
                 }
             } catch(e) {
                 console.error(e);
